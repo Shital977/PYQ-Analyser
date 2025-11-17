@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>PYQ Analyzer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📚 PYQ Analyzer</h1>
+      <p>Upload previous year question papers and ask questions.</p>
+    </header>
+
+    <main>
+      <section id="uploader">
+        <h2>Upload Papers</h2>
+        <input id="fileInput" type="file" multiple />
+        <button id="uploadBtn">Upload & Process</button>
+        <div id="uploadStatus"></div>
+      </section>
+
+      <div class="flex-row">
+        <section id="ask">
+          <h2>Ask Questions</h2>
+          <textarea id="questionInput" placeholder="Type your question here..."></textarea>
+          <button id="askBtn">Ask</button>
+          <div id="answerArea"></div>
+        </section>
+
+        <section id="history">
+          <h2>Conversation</h2>
+          <div id="chat"></div>
+          <button id="clearChat">Clear</button>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <small>Backend: FastAPI | Frontend: HTML/CSS/JS</small>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

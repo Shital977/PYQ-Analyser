@@ -1,0 +1,203 @@
+:root{
+  --bg:#0f1720;
+  --card:#0b1220;
+  --accent:#64FFDA;
+  --muted:#9aa7a6;
+  --text:#e6f0ef;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #071018 0%, #0f1720 100%);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 24px;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
+}
+
+header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+header h1 {
+  color: var(--accent);
+  margin: 0 0 6px;
+}
+
+header p {
+  color: var(--muted);
+  margin: 0;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Upload section centered content */
+#uploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+#uploader h2 {
+  margin-bottom: 8px;
+}
+
+#uploader input[type=file] {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px;
+  background: #0b1820;
+  color: var(--text);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+#uploader button {
+  background: var(--accent);
+  color: #012018;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 200px;
+}
+
+#uploader button:hover {
+  opacity: 0.95;
+}
+
+/* Flex container for Ask and History side-by-side */
+.flex-row {
+  display: flex;
+  gap: 18px;
+}
+
+/* Sections inside flex-row get equal width */
+#ask, #history {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ask section textarea styling */
+#questionInput {
+  width: 100%;
+  flex-grow: 1;
+  min-height: 100px;
+  padding: 10px;
+  border-radius: 8px;
+  resize: vertical;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+/* Ask button styling */
+#askBtn {
+  background: var(--accent);
+  color: #012018;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+#askBtn:hover {
+  opacity: 0.95;
+}
+
+/* Answer area styling */
+#answerArea {
+  margin-top: 12px;
+  white-space: pre-wrap;
+  color: var(--text);
+  flex-grow: 1;
+}
+
+
+
+
+/* Chat Clear button styling */
+#clearChat {
+  margin-top: 12px;
+  background: var(--accent);
+  color: #012018;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+#clearChat:hover {
+  opacity: 0.95;
+}
+
+footer {
+  margin-top: 18px;
+  text-align: center;
+  color: var(--muted);
+  grid-column: 1 / -1;
+}
+#chat {
+  max-height: 500px;
+  width: 100%;         /* full width inside container */
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: transparent; /* keep background transparent */
+  color: var(--text);
+}
+
+.chat-row {
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.user {
+  align-self: flex-end;
+  background: rgba(100, 255, 218, 0.08);
+  border-left: 4px solid var(--accent);
+  color: var(--text);
+}
+
+.bot {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 4px solid #80CBC4;
+  color: var(--text);
+}

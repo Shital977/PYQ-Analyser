@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+PyPDF2
+python-pptx
+pytesseract
+pdf2image
+langchain
+langchain-google-genai
+google-generative-ai
+faiss-cpu
