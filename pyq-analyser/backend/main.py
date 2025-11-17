@@ -30,7 +30,7 @@ app.add_middleware(
 # -----------------------------
 # GOOGLE API KEY
 # -----------------------------
-genai.configure(api_key="AIzaSyB8PrIfDePo8rtmD75rW_pE06mL5u0bwQo")
+genai.configure(api_key="enter your api key")
 
 # -----------------------------
 # LOCAL PATHS
@@ -165,4 +165,5 @@ async def ask_question(data: dict):
     except Exception as e:
         print(f"ERROR in /ask: {e}")
         return {"error": "Internal server error occurred"}
+
 
