@@ -10,6 +10,7 @@ from PIL import Image
 import google.generativeai as genai
 from faiss import IndexFlatL2
 import numpy as np
+import google.generativeai as genai
 
 # -----------------------------
 # Create FastAPI App
@@ -30,7 +31,7 @@ app.add_middleware(
 # -----------------------------
 # GOOGLE API KEY
 # -----------------------------
-genai.configure(api_key="enter your api key")
+genai.configure(api_key="AIzaSyBRVFOCR8c8pFH5ct0iwpyephgXdSye90o")
 
 # -----------------------------
 # LOCAL PATHS
@@ -79,19 +80,29 @@ def chunk_text(text, size=300):
 # -----------------------------
 embed_model = "models/text-embedding-004"
 
-def embed_text(texts):
+def embed_text(text: str):
     result = genai.embed_content(
-        model=embed_model,
-        content=texts,
+        model="models/text-embedding-004",
+        content=text,
         task_type="retrieval_document"
     )
-    return np.array(result["embedding"], dtype="float32")
+
+    if "embedding" in result:
+        emb = result["embedding"]
+        if isinstance(emb, dict) and "values" in emb:
+            return np.array(emb["values"], dtype="float32")
+        return np.array(emb, dtype="float32")
+
+    if "embeddings" in result:
+        return np.array(result["embeddings"][0]["values"], dtype="float32")
+
+    raise ValueError(f"Unknown embedding response format: {result}")
 
 # -----------------------------
 # ROUTE: Upload + Process Files
 # -----------------------------
 @app.post("/upload")
-async def upload_files(file: UploadFile = File(...)):  # changed from list[UploadFile] to single UploadFile and param name to 'file'
+async def upload_files(file: UploadFile = File(...)):
     global documents
 
     file_bytes = await file.read()
@@ -110,6 +121,7 @@ async def upload_files(file: UploadFile = File(...)):  # changed from list[Uploa
 
     chunks = chunk_text(text)
     embeddings = []
+
     for chunk in chunks:
         emb = embed_text(chunk)
         embeddings.append(emb)
@@ -135,27 +147,18 @@ async def ask_question(data: dict):
         if not question:
             return {"error": "Question is required"}
 
-        print(f"DEBUG: Received question: {question}")
-
         q_emb = embed_text(question)
-        print(f"DEBUG: Question embedding shape: {q_emb.shape}")
-
         D, I = index.search(np.array([q_emb]), k)
         retrieved = [documents[i] for i in I[0] if i < len(documents)]
 
         if len(retrieved) == 0:
             prompt = f"Answer the following question:\n\nQuestion: {question}"
-            print("DEBUG: No context found, sending direct question prompt")
         else:
             prompt = (
-                "Use the following context to answer the question. "
-                "If the answer is not contained in the context, answer based on your general knowledge.\n\n"
+                "Use the following context to answer the question.\n\n"
                 + "\n\n---\n\n".join(retrieved)
                 + f"\n\nQuestion: {question}"
             )
-            print("DEBUG: Context found, sending context prompt")
-
-        print("DEBUG: Prompt sent to model:\n", prompt)
 
         model = genai.GenerativeModel("models/gemini-2.5-flash")
         response = model.generate_content(prompt)
@@ -163,7 +166,60 @@ async def ask_question(data: dict):
         return {"answer": response.text}
 
     except Exception as e:
-        print(f"ERROR in /ask: {e}")
         return {"error": "Internal server error occurred"}
 
+
+import re
+
+@app.post("/analyze-question-paper")
+async def analyze_question_paper():
+    """
+    This endpoint:
+    - Uses already extracted content from `documents`
+    - Automatically detects questions
+    - Generates short answers for each question
+    """
+
+    if not documents:
+        return {"error": "No document uploaded yet"}
+
+    # Combine all extracted chunks into one text
+    full_text = "\n".join(documents)
+
+    # Simple question detection (exam-style)
+    question_pattern = re.compile(
+        r"(?:Q\d+\.|\d+\.|\(\w\)|[a-zA-Z]\))\s+.*",
+        re.MULTILINE
+    )
+
+    questions = question_pattern.findall(full_text)
+
+    if not questions:
+        return {"error": "No questions detected in the document"}
+
+    model = genai.GenerativeModel("models/gemini-2.5-flash")
+
+    results = []
+
+    for q in questions:
+        prompt = (
+            "Answer the following exam question briefly and clearly:\n\n"
+            f"{q}"
+        )
+
+        try:
+            response = model.generate_content(prompt)
+            answer = response.text
+        except Exception:
+            answer = "Answer could not be generated."
+
+        results.append({
+            "question": q.strip(),
+            "answer": answer.strip()
+        })
+
+    return {
+        "total_questions": len(results),
+        "solutions": results
+    }
 
