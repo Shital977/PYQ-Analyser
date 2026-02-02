@@ -7,41 +7,80 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>📚 PYQ Analyzer</h1>
-      <p>Upload previous year question papers and ask questions.</p>
-    </header>
 
-    <main>
-      <section id="uploader">
-        <h2>Upload Papers</h2>
-        <input id="fileInput" type="file" multiple />
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <h1>📚 PYQ Analyzer</h1>
+    <p>Upload previous year question papers and get them solved instantly.</p>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <main class="main-layout">
+
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+
+      <!-- UPLOAD (CENTER & HIGHLIGHTED) -->
+      <section id="uploader" class="card upload-card">
+        <h2>📄 Upload Question Paper</h2>
+        <input id="fileInput" type="file" />
         <button id="uploadBtn">Upload & Process</button>
         <div id="uploadStatus"></div>
       </section>
 
-      <div class="flex-row">
-        <section id="ask">
-          <h2>Ask Questions</h2>
-          <textarea id="questionInput" placeholder="Type your question here..."></textarea>
-          <button id="askBtn">Ask</button>
-          <div id="answerArea"></div>
-        </section>
+      <!-- SOLVED QUESTION PAPER PREVIEW -->
+      <section class="card answer-sheet-preview">
+        <h2>📝 Solved Question Paper</h2>
+        <p id="totalQuestions">No paper analyzed yet</p>
+        <button id="viewAnswersBtn" disabled>
+          View Full Answers →
+        </button>
+      </section>
 
-        <section id="history">
-          <h2>Conversation</h2>
-          <div id="chat"></div>
-          <button id="clearChat">Clear</button>
-        </section>
+      <!-- ASK QUESTION -->
+      <section id="ask" class="card">
+        <h2>❓ Ask a Question</h2>
+        <textarea
+          id="questionInput"
+          placeholder="Ask from the uploaded paper..."
+        ></textarea>
+        <button id="askBtn">Ask</button>
+        <div id="answerArea"></div>
+      </section>
+
+      <!-- CONVERSATION -->
+      <section id="history" class="card">
+        <h2>💬 Conversation</h2>
+        <div id="chat"></div>
+        <button id="clearChat">Clear</button>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FULLSCREEN ANSWER MODAL -->
+  <div id="answerModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📘 Solved Question Paper</h2>
+        <button id="closeModal">✖</button>
       </div>
-    </main>
 
-    <footer>
-      <small>Backend: FastAPI | Frontend: HTML/CSS/JS</small>
-    </footer>
+      <div id="fullAnswerSheet" class="white-sheet">
+        <!-- Questions & answers injected via JS -->
+      </div>
+    </div>
   </div>
 
-  <script src="app.js"></script>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <small>FastAPI Backend | PYQ Analyzer</small>
+  </footer>
+
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
